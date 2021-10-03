@@ -1,4 +1,3 @@
-
 from neuralintents import GenericAssistant
 import speech_recognition
 
@@ -61,12 +60,15 @@ def record_audio(ask = False):
             voice(ask)
         audio = recognizer.listen(source)
         voice_data = ''
-        try:
-            voice_data = recognizer.recognize_google(audio)
-            print('Recognizer voice :'+ voice_data)
-        except Exception:
+        voice_data = recognizer.recognize_google(audio)
+        print('Recognizer voice :'+ voice_data)
+        # pywhatkit.playonyt(voice_data)
+        # try:
+        #     voice_data = recognizer.recognize_google(audio)
+        #     print('Recognizer voice :'+ voice_data)
+        # except Exception:
             
-            voice('Oops something went Wrong')
+        #     voice('Oops something went Wrong')
         return voice_data
 
 def voice(audio_string):
@@ -121,9 +123,9 @@ def quit():
 def play():
     # speaker.say('What do you want to play?')
     search = record_audio('What do you want to play?')
-    voice_data = record_audio()
-    song = voice_data.replace('play', '')
-    pywhatkit.playonyt(song)
+    data = record_audio()
+    song = data.replace('play', '')
+    pywhatkit.playonyt(data)
     # pywhatkit.playonyt("play justin bieber")
             
     
