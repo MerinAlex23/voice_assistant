@@ -66,7 +66,7 @@ def record_audio(ask = False):
             print('Recognizer voice :'+ voice_data)
         except Exception:
             
-        voice('Oops something went Wrong')
+            voice('Oops something went Wrong')
         return voice_data
 
 def voice(audio_string):
