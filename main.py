@@ -1,3 +1,4 @@
+
 from neuralintents import GenericAssistant
 import speech_recognition
 
@@ -34,7 +35,7 @@ def create_note():
                 recognizer.adjust_for_ambient_noise(mic,duration=0.2)
                 audio=recognizer.listen(mic)
                 note=recognizer.recognize_google(audio)
-                print('Recognizer voice :'+ note)  #lija
+                print('Recognizer voice :'+ note)
                 note=note.lower()
                 speaker.say("Choose a filename")
                 speaker.runAndWait()
@@ -57,18 +58,18 @@ def record_audio(ask = False):
 
     with speech_recognition.Microphone() as source:
         if ask:
-            lee_voice(ask)
+            voice(ask)
         audio = recognizer.listen(source)
         voice_data = ''
         try:
             voice_data = recognizer.recognize_google(audio)
             print('Recognizer voice :'+ voice_data)
         except Exception:
-            print('Oops something went Wrong')
-        #lee_voice('Oops something went Wrong')
+            
+        voice('Oops something went Wrong')
         return voice_data
 
-def lee_voice(audio_string):
+def voice(audio_string):
 #Play audio text to voice
     tts = gTTS(text=audio_string, lang='en')
     r = random.randint(1, 10000000)
@@ -118,10 +119,12 @@ def quit():
     sys.exit(0)
 
 def play():
-    voice_data = record_audio()
+    # speaker.say('What do you want to play?')
     search = record_audio('What do you want to play?')
+    voice_data = record_audio()
     song = voice_data.replace('play', '')
     pywhatkit.playonyt(song)
+    # pywhatkit.playonyt("play justin bieber")
             
     
     
@@ -138,39 +141,43 @@ mappings={
 
 assistant=GenericAssistant('intents.json',intent_methods=mappings)
 assistant.train_model()
-while True:
-    try:
-        with speech_recognition.Microphone() as mic:
-            recognizer.adjust_for_ambient_noise(mic,duration=0.2)
-            audio=recognizer.listen(mic)
-
-            message=recognizer.recognize_google(audio)
-            message=message.lower()
-
-        assistant.request(message)
-
-    except speech_recognition.UnknownValueError:
-        recognizer=speech_recognition.Recognizer()
 
 
 
+def train():
+    global recognizer
+    while True:
+    
+        try:
+            with speech_recognition.Microphone() as mic:
+                recognizer.adjust_for_ambient_noise(mic,duration=0.2)
+                audio=recognizer.listen(mic)
+
+                message=recognizer.recognize_google(audio)
+                message=message.lower()
+
+            assistant.request(message)
+
+        except speech_recognition.UnknownValueError:
+            recognizer=speech_recognition.Recognizer()
+
+# gui
+def onclick():
+    print("button cick")
+    hello()
+    train()
+root=tk.Tk()
+root.title("Assistant")
 
 
+btn1=tk.Button(root,text="click to listen",width=25,
+    height=5,
+    bg="blue",
+    fg="yellow",
+    font=('Helvetica 18 bold'),
+    command=onclick)
 
 
+btn1.pack()
 
-# def onclick():
-#     print("button cick")
-
-# root=tk.Tk()
-# root.title("gui button")
-
-
-# btn1=tk.Button(root,text="button 1",command=onclick)
-# btn2=tk.Button(root,text="button 2")
-
-
-# btn1.pack()
-# btn2.pack()
-
-# root.mainloop()
+root.mainloop()
